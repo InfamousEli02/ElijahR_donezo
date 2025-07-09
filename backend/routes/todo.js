@@ -96,7 +96,8 @@ router.delete("/:todoId", async (req, res) => {
     // Use Prisma to delete the todo with the specified ID
     await prisma.todo.delete({
       where: {
-        id: todoId, // Match the todo based on its unique ID
+        id: todoId,  // Match the todo based on its unique ID
+        completed: true, 
       },
     });
 
