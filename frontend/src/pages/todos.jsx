@@ -16,6 +16,19 @@ export default function Todos(){
       modalRef.current.showModal();
     }
   }
+
+  const { register, handleSubmit } = useForm({ 
+    defaultValues: { 
+      name: "", 
+      description: "" 
+    } 
+  });
+
+  const handleNewTodo = (values) => {
+    toggleNewTodoModal();
+    console.log(values)
+  }
+
   //NewTodoButton component
   function NewTodoButton() {
     return (
@@ -31,34 +44,22 @@ export default function Todos(){
      <dialog ref={modalRef} className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">New Todo</h3>
-          <form>
+          <form onSubmit={handleSubmit(handleNewTodo)}>
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text">Name of Todo</span>
               </div>
-              <input
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered w-full"
-              />
+              <input type="text" placeholder="Type here" className="input input-bordered w-full" {...register("name")} />
             </label>
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text">Description</span>
               </div>
-              <input
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered w-full"
-              />
+              <input type="text" placeholder="Type here" className="input input-bordered w-full" {...register("description")} />
             </label>
             <div className="modal-action">
-              <button type="submit" className="btn btn-primary">
-                Create Todo
-              </button>
-              <button type="button" className="btn btn-ghost">
-                Close
-              </button>
+              <button type="submit" className="btn btn-primary">Create Todo</button>
+              <button type="button" onClick={toggleNewTodoModal} className="btn btn-ghost">Close</button>
             </div>
           </form>
         </div>
