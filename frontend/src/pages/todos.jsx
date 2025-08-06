@@ -5,8 +5,7 @@ import getAxiosClient from "../axios-instance";
 
 export default function Todos(){
   const modalRef = useRef();
-
-  
+  const queryClient = useQueryClient();
 
   const { mutate: createNewTodo } = useMutation({
 	  // The key used to identify this mutation in React Query's cache
@@ -23,8 +22,23 @@ export default function Todos(){
 	    return data;
 	  },
     onSuccess: () => {
-	    // queryClient.invalidateQueries("todos");
+	    queryClient.invalidateQueries("todos");
 	  }
+  });
+
+  //New mutation that will make PUT requests to server, edit a specific todo and mark it as complete
+  const { mutate: markAsCompleted } = useMutation({
+    mutationKey: ["markAsCompleted"],
+    mutationFn: async (todoId) => {
+      const axiosInstance = await getAxiosClient(); 
+
+        const { data } = await axiosInstance.put(`http://localhost:8080/todos/${todoId}/completed`);
+
+        return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    }
   });
 
   const { data, isError, isLoading } = useQuery({
@@ -85,7 +99,7 @@ export default function Todos(){
   //NewTodoButton component
   function NewTodoButton() {
     return (
-      <button className="btn btn-primary" onClick={toggleNewTodoModal}>
+      <button className="btn text-white btn-primary" onClick={toggleNewTodoModal}>
         New Todo
       </button>
     )
@@ -124,10 +138,10 @@ export default function Todos(){
     return (
     <div className="w-lg h-sm flex column items-center justify-center gap-4">
     {data.success && data.todos && data.todos.length >= 1 ? (
-      <ul className="flex column items-center justify-center gap-4">
+      <ul className="flex flex-col items-center justify-center gap-4">
         {
           data.todos.map(todo => (
-            <li className="inline-flex items-center gap-4">
+            <li key={todo.id} className="text-white inline-flex items-center gap-4 ">
               <div className="w-md">
                 <h3 className="text-lg">
                   {todo.name}
@@ -136,7 +150,7 @@ export default function Todos(){
               </div>
               <div className="w-md">
                 <label className="swap">
-                  <input type="checkbox" onClick={() => markAsCompleted(todo.id)} />
+                <input type="checkbox" onClick={() => markAsCompleted(todo.id)} />
                   <div className="swap-on">
                     Yes
                   </div>

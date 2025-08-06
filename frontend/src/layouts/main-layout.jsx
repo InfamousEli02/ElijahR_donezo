@@ -29,9 +29,9 @@ export default function MainLayout(){
     //The Outlet component acts as a placeholder that dynamically renders the child route component 
     // based on the current URL path
     <>
-      <div className="navbar bg-base-100">
+      <div className="navbar bg-gray-500/50 border-2 border-gray-500 border-solid">
         <div className="flex-1">
-          <Link to="/todos" className="btn btn-ghost text-xl">Donezo</Link>
+          <Link to="/todos" className="btn btn-ghost text-white text-xl">Donezo</Link>
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
